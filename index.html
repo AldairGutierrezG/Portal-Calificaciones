@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Portal Escolar</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+body{
+font-family:Arial,sans-serif;
+margin:0;
+background:#f5f7fa;
+}
+
+header{
+background:#003366;
+color:white;
+padding:15px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
+
+.logo{
+height:80px;
+width:80px;
+object-fit:contain;
+background:white;
+border-radius:10px;
+padding:5px;
+}
+
+.titulo{
+text-align:center;
+flex:1;
+}
+
+.login{
+max-width:500px;
+margin:30px auto;
+background:white;
+padding:25px;
+border-radius:15px;
+box-shadow:0 0 15px rgba(0,0,0,.15);
+}
+
+input{
+width:100%;
+padding:12px;
+font-size:18px;
+margin-top:10px;
+}
+
+button{
+width:100%;
+padding:12px;
+margin-top:10px;
+background:#003366;
+color:white;
+border:none;
+cursor:pointer;
+}
+
+.panel{
+display:none;
+padding:20px;
+}
+
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:15px;
+margin-top:20px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:12px;
+text-align:center;
+box-shadow:0 0 10px rgba(0,0,0,.1);
+}
+
+.valor{
+font-size:40px;
+font-weight:bold;
+}
+
+canvas{
+background:white;
+padding:20px;
+margin-top:20px;
+border-radius:12px;
+}
+
+.final{
+background:#111827;
+color:white;
+padding:25px;
+margin-top:20px;
+text-align:center;
+border-radius:15px;
+}
+
+.final h1{
+font-size:70px;
+margin:0;
+color:#00ff88;
+}
+
+</style>
+</head>
+
+<body>
+
+<header>
+
+<img src="renders.png" class="logo">
+
+<div class="titulo">
+<h1>DIAGNÓSTICOS ENERGÉTICOS</h1>
+<h3>Portal Escolar</h3>
+</div>
+
+<img src="utld.png" class="logo">
+
+</header>
+
+<div class="login">
+
+<h2>Consulta tu avance académico</h2>
+
+<input
+id="matricula"
+placeholder="Ingrese su matrícula">
+
+<button onclick="consultar()">
+Consultar
+</button>
+
+</div>
+
+<div class="panel" id="panel">
+
+<h2 id="nombre"></h2>
+
+<div class="cards">
+
+<div class="card">
+<h3>Promedio Tareas</h3>
+<div class="valor" id="tareas">0</div>
+</div>
+
+<div class="card">
+<h3>Prácticas</h3>
+<div class="valor" id="practicas">0</div>
+</div>
+
+<div class="card">
+<h3>Examen</h3>
+<div class="valor" id="examen">0</div>
+</div>
+
+<div class="card">
+<h3>Asistencia</h3>
+<div class="valor" id="asistencia">0%</div>
+</div>
+
+</div>
+
+<canvas id="competencias"></canvas>
+
+<div class="final">
+
+<h2>Calificación Final</h2>
+
+<h1 id="final">0</h1>
+
+</div>
+
+</div>
+
+<script>
+
+// REEMPLAZAR POR TU URL DE APPS SCRIPT
+const API =
+"https://script.google.com/macros/s/AKfycbzbn6Z9Jd5S6nV89OC9R2RjrZUDXBybr1e5VugPoLfQf6zwTb455tgA9tWnXaN_F9b1EA/exec";
+
+let radar;
+
+async function consultar(){
+
+const matricula =
+document.getElementById("matricula").value;
+
+try{
+
+const respuesta =
+await fetch(API+"?matricula="+matricula);
+
+const data =
+await respuesta.json();
+
+if(data.error){
+
+alert("Matrícula no encontrada");
+return;
+
+}
+
+document.getElementById("panel").style.display="block";
+
+document.getElementById("nombre")
+.innerText=data.nombre;
+
+document.getElementById("tareas")
+.innerText=data.tareas;
+
+document.getElementById("practicas")
+.innerText=data.practicas;
+
+document.getElementById("examen")
+.innerText=data.examen;
+
+document.getElementById("asistencia")
+.innerText=data.asistencia+"%";
+
+document.getElementById("final")
+.innerText=data.final;
+
+if(radar){
+radar.destroy();
+}
+
+radar = new Chart(
+document.getElementById("competencias"),
+{
+type:'radar',
+data:{
+labels:[
+'Saber',
+'Saber-Hacer',
+'Ser y Convivir'
+],
+datasets:[{
+label:'Competencias',
+data:[
+data.saber,
+data.saberHacer,
+data.serConvivir
+]
+}]
+}
+}
+);
+
+}
+catch(error){
+
+alert("Error de conexión");
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
