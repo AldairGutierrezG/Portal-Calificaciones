@@ -230,8 +230,15 @@ document.getElementById("examen")
 document.getElementById("asistencia")
 .innerText=data.asistencia+"%";
 
-document.getElementById("final")
-.innerText = Number(data.final).toFixed(1);
+const final = document.getElementById("final");
+
+if (isNaN(data.final)) {
+    final.innerText = data.final;
+    final.style.color = "#ff4d4d"; // rojo
+} else {
+    final.innerText = Number(data.final).toFixed(1);
+    final.style.color = "#00ff88"; // verde
+}
 
 if(radar){
 radar.destroy();
