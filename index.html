@@ -231,7 +231,7 @@ document.getElementById("asistencia")
 .innerText=data.asistencia+"%";
 
 document.getElementById("final")
-.innerText=data.final;
+.innerText = Number(data.final).toFixed(1);
 
 if(radar){
 radar.destroy();
