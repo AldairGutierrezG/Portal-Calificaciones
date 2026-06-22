@@ -218,14 +218,11 @@ document.getElementById("panel").style.display="block";
 document.getElementById("nombre")
 .innerText=data.nombre;
 
-document.getElementById("tareas")
-.innerText=data.tareas;
+document.getElementById("tareas").innerText = Number(data.tareas).toFixed(1);
 
-document.getElementById("practicas")
-.innerText=data.practicas;
+document.getElementById("practicas").innerText = Number(data.practicas).toFixed(1);
 
-document.getElementById("examen")
-.innerText=data.examen;
+document.getElementById("examen").innerText = Number(data.examen).toFixed(1);
 
 document.getElementById("asistencia")
 .innerText=data.asistencia+"%";
